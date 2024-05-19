@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { RiArrowDownWideLine, RiArrowUpWideLine } from "react-icons/ri";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +19,45 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Navbar
+          navItems={[{
+            label: (<span>Home</span>),
+            href: '/',
+            key: 'home'
+          }, [
+            {
+              openLabel: <span className="flex flex-row items-center gap-2">More <RiArrowDownWideLine /></span>,
+              closeLabel: <span className="flex flex-row items-center gap-2">Less <RiArrowUpWideLine /></span>,
+              menu: (<menu className="bg-white w-full [&_button]:w-full [&_button]:transition-colors [&_button]:duration-150 [&_button]:p-4">
+                <li><button className="hocus:bg-blue-200">A</button></li>
+                <li><button className="hocus:bg-blue-200">B</button></li>
+                <li><button className="hocus:bg-blue-200">C</button></li>
+              </menu>),
+              key: 'more-dropdown-2'
+            },
+            {
+              openLabel: <span className="flex flex-row items-center gap-2">More <RiArrowDownWideLine /></span>,
+              closeLabel: <span className="flex flex-row items-center gap-2">Less <RiArrowUpWideLine /></span>,
+              menu: (<menu className="bg-white w-full [&_button]:w-full [&_button]:transition-colors [&_button]:duration-150 [&_button]:p-4">
+                <li><button className="hocus:bg-blue-200">A</button></li>
+                <li><button className="hocus:bg-blue-200">B</button></li>
+                <li><button className="hocus:bg-blue-200">C</button></li>
+              </menu>),
+              key: 'more-dropdown'
+            },
+          ]]}
+          skipLink={{
+            href: "#main",
+            className: "bg-blue-200",
+            label: <span>Skip to content</span>
+          }}
+          className="justify-between"
+          navItemClassName="px-4 py-2 transition-colors hocus:bg-blue-200"
+        />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
