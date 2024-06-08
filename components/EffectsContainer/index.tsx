@@ -1,12 +1,13 @@
 import { ReactNode, useEffect, useState } from 'react';
 
 type Props = {
+  children: ReactNode
   fadeIn?: boolean
   delay?: DelayTimings
   duration?: DelayTimings
   lift?: LiftAndSlideAmounts
   slide?: LiftAndSlideAmounts
-  children?: ReactNode
+  className?: string
 }
 
 type DelayTimings = .25 | .5 | 1 | 2 | 3 | 4 | 5
@@ -14,12 +15,13 @@ type LiftAndSlideAmounts = -32 | -24 | -10 | -5 | 0 | 5 | 10 | 24 | 32
 
 
 export default function EffectsContainer({
+  children,
   fadeIn = true,
   delay = 1,
   duration = 1,
   lift = 0,
   slide = 0,
-  children
+  className = ''
 }: Props) {
   const [trigger, setTrigger] = useState(false)
 
@@ -153,7 +155,7 @@ export default function EffectsContainer({
   }, [])
 
   return (
-    <div className={`flex transition ease-in-out ${trigger ? generateTriggerClasses() : generateInitialClasses()} ${generateStaticClasses()}`}>
+    <div className={`flex transition ease-in-out ${trigger ? generateTriggerClasses() : generateInitialClasses()} ${generateStaticClasses()} ${className}`}>
       {children}
     </div>
   );

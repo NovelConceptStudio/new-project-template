@@ -17,8 +17,9 @@ const config: Config = {
     },
   },
   plugins: [
-    plugin(function({ addVariant }) {
-      addVariant('hocus', ['&:hover', '&:focus'])
+    plugin(function ({ addVariant }) {
+      addVariant('attention', ['&:hover', '&:focus', '&:active', '&:target'])
     })
-  ]};
+  ]
+};
 export default config;
