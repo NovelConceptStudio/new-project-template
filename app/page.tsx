@@ -1,11 +1,10 @@
-import Home from "./home/page";
+import Home from '@/app/home'
+import TemplateHome  from '@/app/template/home' 
 
-/**
- * Default page
- * @returns 
- */
 export default function Index() {
-  return (
-    <Home />
-  );
+  // When starting a new project, uncomment this line:
+  // return <Home />;
+
+  // and delete the following line:
+  return <TemplateHome />;
 }

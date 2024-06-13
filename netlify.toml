@@ -1,0 +1,7 @@
+[template.environment]
+# Required to use Nodemailer
+EMAIL_HOST = "Set me"
+EMAIL_PORT = "Set me"
+EMAIL = "Set me"
+PASSWORD = "Set me"
+

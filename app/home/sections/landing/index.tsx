@@ -1,8 +1,20 @@
-export default function Landing() {
+import { SectionContainer } from "@/lib/layout/SectionContainer";
+import { SectionContent } from "@/lib/layout/SectionContent";
+
+export function Landing() {
     return (
-        <section>
-            <h1 className="bg-green-100 p-8">Template</h1>
-            <button>Press me</button>
-        </section>
+        <section id="main_content">
+            <SectionContainer>
+                <SectionContent
+                    heading={'Hello, World!'}
+                    description={
+                        <div className="flex flex-col gap-2">
+                            <p>{`Follow the instructions found in "app/page.tsx" to get started`}</p>
+                        </div>
+                    }
+                    isPrimary
+                ></SectionContent>
+            </SectionContainer>
+        </section >
     )
 }
