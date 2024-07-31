@@ -1,15 +1,15 @@
 'use client'
 import { Controller, RegisterOptions, useFormContext } from "react-hook-form"
-import { CheckboxGroup, Checkbox } from "react-aria-components"
+import { RadioGroup as RG, Radio } from "react-aria-components"
 import { InputSlot } from "../../InputSlot"
-import { RiCheckLine } from "react-icons/ri"
+import { RiCheckboxBlankCircleLine, RiRadio2Fill } from "react-icons/ri"
 
 type Props = {
   name: string
   label: React.ReactNode
-  checkboxes: CheckboxData[]
+  options: OptionData[]
   isRequired?: boolean
-  defaultValue?: string[]
+  defaultValue?: string
   registerOpts?: RegisterOptions
   divClassname?: string
   classNames?: StyleOverrides
@@ -17,14 +17,14 @@ type Props = {
   displayErrorMessage?: boolean
 }
 
-type CheckboxData = {
+type OptionData = {
   value: string,
   label: string
 }
 
 type StyleOverrides = {
   container?: string
-  checkboxesContainer?: string,
+  radioButtonsContainer?: string,
   label?: string
   input?: string
   errorMessage?: string
@@ -33,11 +33,11 @@ type StyleOverrides = {
   checkbox?: string
 }
 
-export function CheckboxFieldset({
+export function RadioGroup({
   name,
   label,
-  checkboxes,
-  defaultValue = [],
+  options,
+  defaultValue,
   classNames = {},
   isRequired = false,
   displayErrorMessage = true,
@@ -53,7 +53,7 @@ export function CheckboxFieldset({
         field: { name, value, onChange, onBlur, ref },
         fieldState: { invalid, error }
       }) => {
-        return <CheckboxGroup
+        return <RG
           name={name}
           className={`flex flex-col ${classNames.container ?? ''}`}
           defaultValue={defaultValue}
@@ -67,43 +67,33 @@ export function CheckboxFieldset({
             label={label}
             input={
               <div
-                className={`flex flex-col ${classNames.checkboxesContainer}`}
+                className={`flex flex-col ${classNames.radioButtonsContainer}`}
               >
                 {
-                  checkboxes.map((checkboxInfo, i) => (<Checkbox
-                    key={`cb-${name}-${i}`}
-                    value={checkboxInfo.value}
-                    className={`group flex flex-row items-center gap-2 ${classNames.checkbox ?? ''}`}>
-                    <div
-                      className={`
-                    transition-colors
-                    duration-150
-                    bg-white
-                    h-fit
-                    aspect-square
-                    rounded-sm
-                    w-4
-                    group-hover:bg-orange-100
-                    group-data-[selected=true]:bg-orange-700
-                  `}
-                    >
-                      <div
-                        className={`
-                      transition-opacity
-                      group-data-[selected=true]:opacity-100
-                      duration-150
-                      opacity-0
-                    `}>
-                        <RiCheckLine className="text-white" />
-                      </div>
-                    </div>
+                  options.map((option, i) => (<Radio
+                    className={`flex flex-row gap-2 items-center group`}
+                    key={`${option.value}-${i}`}
+                    value={option.value}>
 
-                    {checkboxInfo.label}
-                  </Checkbox>
-                  ))
+                    <RiCheckboxBlankCircleLine className={`
+                      transition-colors
+                      duration-150
+                      bg-white
+                      h-fit
+                      aspect-square
+                      w-4
+                      rounded-full
+                      
+                      group-hover:bg-orange-100
+                      group-data-[selected=true]:bg-orange-700
+                      group-data-[selected=true]:text-white-smoke
+
+                    `} />
+                    {option.label}
+                  </Radio>)
+                  )
                 }
               </div>
-
             }
             isRequired={isRequired}
             description={''}
@@ -111,7 +101,7 @@ export function CheckboxFieldset({
             error={error?.message}
             displayErrorMessages={displayErrorMessage}
           />
-        </CheckboxGroup >
+        </RG >
       }}
     />
   );

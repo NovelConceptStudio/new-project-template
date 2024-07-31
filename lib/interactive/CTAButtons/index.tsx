@@ -1,63 +1,58 @@
 'use client'
 import { ReactNode } from 'react';
 import { RiArrowRightLine, RiArrowRightWideFill } from 'react-icons/ri';
+import { Button } from '../Button';
+
+type ClassNames = {
+  container?: string
+  buttons?: string
+  ctaButton?: string
+  learnMoreButton?: string
+}
 
 type Props = {
-  variant?: 'light' | 'dark'
+  forBg?: 'light' | 'dark'
   ctaButton?: boolean
-  ctaButtonClassname?: string
   learnMoreButton?: boolean
   ctaLabel?: ReactNode
   learnMoreLabel?: ReactNode
   ctaHref?: string
   learnMoreHref?: string
-  learnMoreButtonClassname?: string
-  className?: string
-  buttonClassName?: string
-  ctaAriaLabel?: string
-  learnMoreAriaLabel?: string
+  className?: ClassNames
 }
 
-const sharedButtonClasses = `px-4 py-2 transition-colors`
-
 export function CTAButtons({
-  variant = 'dark',
+  forBg = 'dark',
   ctaButton = true,
   learnMoreButton = true,
-  ctaLabel = <span className='flex flex-row items-center gap-2'>Sign up<RiArrowRightLine /></span>,
-  learnMoreLabel = (<span className="flex flex-row gap-2 items-center">
-    Learn More<RiArrowRightWideFill />
+  ctaLabel = <span className='flex flex-row w-full items-center gap-2 justify-center'>Sign up<RiArrowRightLine /></span>,
+  learnMoreLabel = (<span className="flex flex-row w-full gap-2 items-center justify-center">
+    Tell Me More<RiArrowRightWideFill />
   </span>),
-  ctaHref = '/',
-  learnMoreHref = '/training-app',
-  className = '',
-  buttonClassName = '',
-  ctaButtonClassname = '',
-  learnMoreButtonClassname = '',
-  ctaAriaLabel = '',
-  learnMoreAriaLabel = ''
+  ctaHref = '/inquiry',
+  learnMoreHref = '/learnMore',
+  className = {},
 }: Props) {
-  const lightCtaButtonClasses = "text-orange-600 bg-white border-white border-2 attention:bg-transparent attention:text-white"
-  const lightLearnMoreButtonClasses = "border-2 border-transparent attention:bg-transparent attention:text-white attention:border-white attention:border-2"
-  const darkCtaButtonClasses = "bg-orange-600 text-white border-2 border-orange-600 attention:bg-transparent attention:text-orange-600 data-[focus-visible=true]:bg-white "
-  const darkLearnMoreButtonClasses = "bg-transparent border-2 border-transparent attention:border-orange-600 attention:text-orange-600"
-
   return (
-    <div className={`flex flex-row gap-4 font-primary tracking-wider ${className}`}>
-      {ctaButton && (<a
-        aria-label={ctaAriaLabel}
-        className={`${sharedButtonClasses} ${variant === 'light' ? lightCtaButtonClasses : darkCtaButtonClasses} ${buttonClassName} ${ctaButtonClassname}`}
+    <div className={`flex flex-row flex-wrap justify-center gap-4 font-secondary tracking-wider ${className.container ?? ''}`}>
+      {ctaButton && (<Button
+        className={className.ctaButton}
         href={ctaHref}
+        forBg={forBg}
+        variant='solid'
+        isLink
       >
         {ctaLabel}
-      </a>)}
-      {learnMoreButton && (<a
-        className={`${sharedButtonClasses} ${variant === 'light' ? lightLearnMoreButtonClasses : darkLearnMoreButtonClasses} ${buttonClassName} ${learnMoreButtonClassname}`}
+      </Button>)}
+      {learnMoreButton && (<Button
+        className={className.learnMoreButton}
         href={learnMoreHref}
-        aria-label={learnMoreAriaLabel}
+        forBg={forBg}
+        variant='hollow'
+        isLink
       >
         {learnMoreLabel}
-      </a>)}
+      </Button>)}
     </div>
   )
 }

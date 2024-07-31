@@ -1,7 +1,4 @@
 'use client'
-import { RegisterOptions, useFormContext } from "react-hook-form"
-import FormFieldWrapper from "../../FormFieldWrapper"
-import CheckboxInput from "../../CheckboxInput"
 
 export type CheckboxFieldProps = {
   name: string

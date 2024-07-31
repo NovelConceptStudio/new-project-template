@@ -1,6 +1,6 @@
 'use client'
 import { textSmall } from "@/foundation/styles"
-import { ErrorMessage } from "../../ErrorMessage"
+import { ErrorMessage } from "../ErrorMessage"
 import { RegisterOptions } from "react-hook-form"
 
 type Props = {

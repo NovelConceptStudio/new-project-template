@@ -1,5 +1,6 @@
 import { textSmall } from "@/foundation/styles"
 import { FieldError, Merge, FieldErrorsImpl } from "react-hook-form"
+import { RiAlertLine } from "react-icons/ri"
 
 type Props = {
     ariaId: string
@@ -16,6 +17,6 @@ export function ErrorMessage({ ariaId, message, className = '', ...rest }: Props
         {...rest}
         aria-hidden // Hide this from screenreaders because we are reading the error message via "aria-describedby"
     >
-        {(message as string) && (message as string)}
+        <RiAlertLine />{(message as string) && (message as string)}
     </span>)
 }

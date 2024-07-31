@@ -1,46 +1,53 @@
 'use client'
 import { RegisterOptions, useFormContext } from "react-hook-form"
-import FormFieldWrapper from "../FormFieldWrapper"
+import { FormFieldWrapper } from "@/lib/components/Form/_deprecated/FormFieldWrapper"
 
 type Props = {
   name: string
   label: React.ReactNode
+  options: React.ReactNode[]
   registerOpts?: RegisterOptions
   divClassname?: string
   className?: string
   labelClassname?: string
-  displayErrorMessage?: boolean
+  displayErrorMessages?: boolean
+  defaultValue?: string
 }
 
-export function CheckboxInput({
+export function SelectInput({
   name,
   label,
+  options,
   registerOpts = {},
   divClassname = '',
   labelClassname = '',
   className = '',
-  displayErrorMessage = true,
+  displayErrorMessages = true,
+  defaultValue,
   ...rest }: Props) {
   const { register, formState: { errors } } = useFormContext()
+
   return (
     <FormFieldWrapper
       name={name}
       label={label}
-      input={(<input
-        type='checkbox'
+      input={<select
         id={name}
-        className={`transition-colors 
-           ${className} 
+        className={`p-2 transition-colors border rounded-md  
+           ${className}
            ${errors[name]?.message ? 'border-red-400' : 'border-gray-300'} 
            `
         }
-        aria-describedby={displayErrorMessage ? `${name}-error` : undefined}
+        aria-describedby={displayErrorMessages ? `${name}-error` : undefined}
+        defaultValue={defaultValue}
         {...rest}
         {...register(name, registerOpts)}
-      />)}
-      divClassname={`flex flex-row-reverse justify-end items-center gap-4 ${divClassname}`}
+      >
+        {options}
+      </select>}
+      divClassname={`flex flex-col ${divClassname}`}
       errorMessage={errors[name]?.message as string}
-      displayErrorMessage={displayErrorMessage}
+      labelClassname={labelClassname}
     />
   );
 }

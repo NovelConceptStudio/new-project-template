@@ -1,5 +1,7 @@
 'use client'
-import { FieldError, Input, Label, TextField, Text, TextArea as TA } from "react-aria-components"
+import { FieldError, Label, TextField, Text, TextArea as TA } from "react-aria-components"
+import { InputSlot } from "../../InputSlot"
+import { Controller, useFormContext } from "react-hook-form"
 
 type Props = {
   name: string
@@ -13,10 +15,11 @@ type Props = {
 }
 
 type StyleOverrides = {
-  textField?: string
+  container?: string
   label?: string
   input?: string
   errorMessage?: string
+  errorMessageContainer?: string
   description?: string
 }
 
@@ -26,26 +29,49 @@ export function TextArea({
   label,
   isRequired = false,
   description = '',
-  classNames = { textField: '', label: '', input: '', errorMessage: '', description: '' },
+  classNames = {},
   displayErrorMessages = true,
-  validate = (value) => null
 }: Props) {
+  const { control } = useFormContext()
 
   return (
-    <TextField name={name} className={`flex flex-col text-white ${classNames.textField}`} isRequired={isRequired} validate={validate}>
-      <Label className={`${classNames.label}`}>
-        {label}
-      </Label>
-      <TA
-        className={`p-2 rounded-lg text-black ${classNames.input}`}
-        placeholder={placeholder}
-        aria-describedby={`${name}-err`}
-        />
-      <Text slot='description' className={`${classNames.description}`}>
-        {description}
-      </Text>
-      {displayErrorMessages && (
-        <FieldError className={`${classNames.errorMessage}`}/>)}
-    </TextField>
-  );
+    <Controller
+      control={control}
+      name={name}
+      rules={{ required: isRequired ? `This field is required` : '' }}
+      render={({
+        field: { name, value, onChange, onBlur, ref },
+        fieldState: { invalid, error }
+      }) => {
+        return (
+          <TextField
+            name={name}
+            className={`flex flex-col text-white ${classNames.container ?? ''}`}
+            isRequired={isRequired}
+            value={value}
+            validationBehavior="aria"
+            onChange={onChange}
+            onBlur={onBlur}
+            isInvalid={invalid}
+
+          >
+            <InputSlot
+              input={<TA
+                ref={ref}
+                className={`p-2 text-black ${classNames.input ?? ''}`}
+                placeholder={placeholder}
+                aria-describedby={`${name}-err`}
+              />}
+              classNames={classNames}
+              label={label}
+              description={description}
+              error={error?.message}
+              displayErrorMessages={displayErrorMessages}
+              isRequired={isRequired}
+            />
+          </TextField>
+        )
+      }}
+    />
+  )
 }

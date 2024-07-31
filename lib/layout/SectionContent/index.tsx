@@ -1,4 +1,4 @@
-import { textRegular, heading1, textMedium } from "@/foundation/styles"
+import { textRegular, heading1, textMedium, textLarge } from "@/foundation/styles"
 import { ReactNode } from "react"
 
 type ClassNames = {
@@ -28,10 +28,10 @@ export const SectionContent = ({
     classNames = {}
 }: Props) => {
     const headings = isPrimary ? (<>
-        {subheading && <h2 className={`${textRegular} ${classNames.subheading ?? ''} font-semibold`}>{subheading}</h2>}
+        {subheading && <h2 className={`${textMedium} ${classNames.subheading ?? ''} font-semibold`}>{subheading}</h2>}
         <h1 className={`${heading1} text-hunter-green ${classNames.heading ?? ''}`}>{heading}</h1>
     </>) : (<>
-        {subheading && <h3 className={`${textRegular} ${classNames.subheading ?? ''} font-semibold`}>{subheading}</h3>}
+        {subheading && <h3 className={`${textLarge} ${classNames.subheading ?? ''} font-semibold`}>{subheading}</h3>}
         <h2 className={`${heading1} ${classNames.heading ?? ''} text-hunter-green`}>{heading}</h2>
     </>)
 
@@ -39,7 +39,7 @@ export const SectionContent = ({
         <div className={`flex flex-col gap-4 ${classNames.container ?? ''}`}>
             {headings}
             {description && <div
-                className={`${textMedium} ${classNames.description ?? ''}`}>
+                className={`${textLarge} ${classNames.description ?? ''}`}>
                 {description}
             </div>}
         </div>

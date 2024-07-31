@@ -1,30 +1,46 @@
 'use client'
-import { ReactNode, useEffect, useState } from 'react';
+import useIsVisible from '@/lib/hooks/useIsVisible';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 type Props = {
   children: ReactNode
   fadeIn?: boolean
-  delay?: DelayTimings
-  duration?: DelayTimings
+  delay?: Timings
+  duration?: Timings
   lift?: LiftAndSlideAmounts
   slide?: LiftAndSlideAmounts
-  className?: string
+  className?: ClassNameOverrides
+  inline?: boolean
+  triggerOnVisibility?: boolean
+  visibilityOffset?: string // Must be in pixels or percentage
 }
 
-type DelayTimings = .25 | .5 | 1 | 2 | 3 | 4 | 5
+type ClassNameOverrides = {
+  container?: string
+  beforeTrigger?: string
+  afterTrigger?: string
+}
+
+type Timings = 0 | .25 | .5 | 1 | 1.25 | 1.5 | 1.75 | 2 | 3 | 4 | 5 | 7.5 | 10 | 15
 type LiftAndSlideAmounts = -32 | -24 | -10 | -5 | 0 | 5 | 10 | 24 | 32
 
 
 export function EffectsContainer({
   children,
-  fadeIn = true,
-  delay = 1,
+  fadeIn = false,
+  delay = 0,
   duration = 1,
   lift = 0,
   slide = 0,
-  className = ''
+  inline = false,
+  triggerOnVisibility = false,
+  visibilityOffset = '0px',
+  className = {}
 }: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [trigger, setTrigger] = useState(false)
+  const isVisible = useIsVisible(ref, { rootMargin: visibilityOffset })
 
   const generateStaticClasses = () => {
     let delayClasses, durationClasses = ''
@@ -38,6 +54,15 @@ export function EffectsContainer({
       case 1:
         delayClasses = 'delay-[1000ms]'
         break
+      case 1.25:
+        delayClasses = 'delay-[1250ms]'
+        break
+      case 1.5:
+        delayClasses = 'delay-[1500ms]'
+        break
+      case 1.75:
+        delayClasses = 'delay-[1750ms]'
+        break
       case 2:
         delayClasses = 'delay-[2000ms]'
         break
@@ -49,8 +74,17 @@ export function EffectsContainer({
         break
       case 5:
         delayClasses = 'delay-[5000ms]'
+        break;
+      case 7.5:
+        delayClasses = 'delay-[7500ms]'
+        break
+      case 10:
+        delayClasses = 'delay-[10000ms]'
+        break
+      case 15:
+        delayClasses = 'delay-[15000ms]'
+        break;
       default:
-        delayClasses = 'delay-[1000ms]'
         break;
     }
 
@@ -64,6 +98,15 @@ export function EffectsContainer({
       case 1:
         durationClasses = 'duration-[1000ms]'
         break
+      case 1.25:
+        durationClasses = 'duration-[1250ms]'
+        break
+      case 1.5:
+        durationClasses = 'duration-[1500ms]'
+        break
+      case 1.75:
+        durationClasses = 'duration-[1750ms]'
+        break
       case 2:
         durationClasses = 'duration-[2000ms]'
         break
@@ -76,8 +119,16 @@ export function EffectsContainer({
       case 5:
         durationClasses = 'duration-[5000ms]'
         break
+      case 7.5:
+        durationClasses = 'duration-[7500ms]'
+        break
+      case 10:
+        durationClasses = 'duration-[10000ms]'
+        break
+      case 15:
+        durationClasses = 'duration-[15000ms]'
+        break;
       default:
-        durationClasses = 'duration-[1000ms]'
         break
     }
 
@@ -85,7 +136,7 @@ export function EffectsContainer({
   }
 
   const generateTriggerClasses = () => {
-    return ['opacity-100', 'translate-y-0', 'translate-x-0'].join(' ')
+    return [className.afterTrigger ?? '', 'opacity-100', 'translate-y-0', 'translate-x-0'].join(' ')
   }
 
   const generateInitialClasses = () => {
@@ -147,17 +198,47 @@ export function EffectsContainer({
       default:
         break
     }
-    return [fadeIn ? 'opacity-0' : 'opacity-100', liftClasses, slideClasses].join(' ')
+    return [className.beforeTrigger ?? '', fadeIn ? 'opacity-0' : 'opacity-100', liftClasses, slideClasses].join(' ')
   }
 
 
   useEffect(() => {
-    setTrigger(true)
+    if (!triggerOnVisibility) setTrigger(true)
   }, [])
 
+
+  useEffect(() => {
+    if (triggerOnVisibility && isVisible) setTrigger(true)
+  }, [isVisible])
+
   return (
-    <div className={`flex transition ease-in-out ${trigger ? generateTriggerClasses() : generateInitialClasses()} ${generateStaticClasses()} ${className}`}>
-      {children}
-    </div>
+    inline ? (
+      <span
+        ref={ref}
+        className={`
+        inline
+        transition
+        ease-in-out
+        ${className.container ?? ''}
+        ${trigger ? generateTriggerClasses() : generateInitialClasses()}
+        ${generateStaticClasses()}
+      `}>
+        {children}
+      </span>
+    ) :
+      (
+        <div
+          ref={ref}
+          className={`
+          flex
+          transition
+          ease-in-out
+          ${className.container ?? ''}
+          ${trigger ? generateTriggerClasses() : generateInitialClasses()}
+          ${generateStaticClasses()}
+        `}>
+          {children}
+        </div>
+      )
   );
 }
